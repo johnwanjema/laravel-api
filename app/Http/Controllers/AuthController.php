@@ -17,10 +17,11 @@ class AuthController extends Controller
      */
     public function signup(Request $request)
     {
+        // dd($request);
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string'
         ]);
         $user = new User([
             'name' => $request->name,
