@@ -53,9 +53,8 @@ class AuthController extends Controller
         ]);
         $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+        return api_response(false, true, 0, 'false',
+            "Wrong credentials or the user does not exist", null);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
