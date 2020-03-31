@@ -15,7 +15,7 @@ use App\User;
 
 // public routes
 Route::post('/auth/login', 'AuthController@login')->name('login.api');
-Route::post('/auth/register', 'AuthController@register')->name('register.api');
+Route::post('/auth/register', 'AuthController@signup')->name('register.api');
 
 
 Route::group(['middleware' => 'auth:api'], function() {
