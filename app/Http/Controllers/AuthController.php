@@ -4,7 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
+
 {
     /**
      * Create user
@@ -18,20 +20,30 @@ class AuthController extends Controller
     public function signup(Request $request)
     {
         // dd($request);
-        $request->validate([
-            'name' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'name' => 'string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string'
         ]);
+        
+        if ($validator->fails()) {
+            return api_response(false, $validator->messages(), 0, 'error',"error creating admin", null);
+        }
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
+
         $user->save();
-        return response()->json([
-            'message' => 'Successfully created user!'
-        ], 201);
+        
+        $data = [
+            'user'=>$user,
+        ];
+
+        return api_response(true, null, 0, 'success',
+        "successfully created the user", $data);
+        
     }
   
     /**
@@ -64,7 +76,6 @@ class AuthController extends Controller
         
 
         $data = [
-
             'user' => $user,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
