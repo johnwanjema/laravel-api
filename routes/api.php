@@ -22,3 +22,11 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/auth/user','AuthController@user');
     Route::get('/auth/logout', 'AuthController@logout')->name('logout');
 });
+
+Route::group(['middleware' => ['auth:api',]], function () {
+    Route::apiResources([
+        'todo' => "TodoController",
+    ]);
+
+    
+});
